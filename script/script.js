@@ -5,22 +5,36 @@ $('#start-game').on('click', function() {
     var correct = 0;
     var incorrect = 0;
     var unanswered = 0;
-
+    var selection = this;
+    var endScreen = "";
     var answers = document.querySelectorAll('.answers');
 
-    
+    $('.input').on('click', function() {
+        $(this).attr('checked', "");
+    });
 
     $('#submit').on('click', function() {
         for (let i = 0; i < answers.length; i++) {
             var currentQ = answers[i].children;
+            var finalWords = 'Correct answers: ' + correct; 
             // console.log(currentQ);
             for (let j = 0; j < answers[i].children.length; j++) {
-                var classes = currentQ[j].classList
-                // if ((classes[] === 'right-answer') && ) {
-
-                // }
+                if ((currentQ[j].type === 'radio') && ($(currentQ[j]).hasClass('right-answer')) && (currentQ[j].hasAttribute('checked'))) {
+                    correct++;
+                    endScreen = '<h3>Correct answers: ' + correct + '</h3><h3>Incorrect answers: ' + incorrect + '</h3><h3>Unanswered questions: ' + unanswered + '</h3>';
+                    console.log(correct);
+                } else if ((currentQ[j].type === 'radio') && ($(currentQ[j]).hasClass('right-answer')) && (!currentQ[j].hasAttribute('checked'))) {
+                    incorrect++;
+                }
             }
+            
         }
+        $('#game-zone').css('display', 'none');
+        $('#lowest-text').html(endScreen);
+        $('.btn')[1].value = 'Restart Game';
+        $('#submit').on('click', function() {
+            location.reload(true);
+        });
     });
 });
 
